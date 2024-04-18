@@ -37,6 +37,7 @@ model TimerSession {
   userId Int
 
   mode          TimerMode
+  started       Boolean   @default(false) // whether the timer has ever been started
   timeRemaining Int? // remaining time in seconds. present only when the timer is paused or if this session was skipped without having been completed
   completeAt    DateTime? // time at which the timer will complete. present only when the timer is running or has completed
 }

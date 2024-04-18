@@ -11,7 +11,7 @@ type Props = {
   mode: TimerMode
 }
 
-export default function Timer({ timeRemaining, completeAt, onPause, onResume, onNext, mode }: Props) {
+export default function Timer({ timeRemaining, completeAt, started, onPause, onResume, onNext, mode }: Props) {
   const [displayedTimeRemaining, setDisplayedTimeRemaining] = useState<number | null>(null);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function Timer({ timeRemaining, completeAt, onPause, onResume, on
       {displayedMinutes}:{displayedSeconds}
     </div>
     <div className="flex mt-2 m-1 gap-2">
-      {isPaused && <Button onPress={onResume} variant="ghost" color="primary">Resume</Button>}
+      {isPaused && <Button onPress={onResume} variant="ghost" color="primary">{started ? "Resume" : "Start"}</Button>}
       {!isPaused && !isComplete && <Button onPress={onPause} variant="ghost">Pause</Button>}
       <Button onPress={onNext} variant="ghost">{nextButtonLabel}</Button>
     </div>

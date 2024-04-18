@@ -22,6 +22,7 @@ export async function action({ request }: ActionFunctionArgs) {
       data: {
         timeRemaining: null,
         completeAt: add(new Date(), { seconds: activeTimer.timeRemaining }),
+        started: true
       }
     });
   });

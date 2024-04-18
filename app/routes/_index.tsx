@@ -39,7 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         data: {
           userId: user.id,
           mode: "FOCUS",
-          completeAt: add(new Date(), { seconds: nextTimerDuration })
+          timeRemaining: nextTimerDuration
         }
       });
     }
@@ -67,7 +67,14 @@ export default function Index() {
     <AppNavbar user={user} />
     <div className="flex justify-center">
       <Card className="flex items-center p-4 mt-28" style={{ minWidth: "30em" }} shadow="lg">
-        <Timer completeAt={activeTimer.completeAt && new Date(activeTimer.completeAt)} timeRemaining={activeTimer.timeRemaining} onPause={onPause} onResume={onResume} onNext={onNext} />
+        <Timer
+          completeAt={activeTimer.completeAt && new Date(activeTimer.completeAt)}
+          timeRemaining={activeTimer.timeRemaining}
+          started={activeTimer.started}
+          onPause={onPause}
+          onResume={onResume}
+          onNext={onNext}
+        />
       </Card>
     </div>
   </div>;

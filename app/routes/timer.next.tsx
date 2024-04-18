@@ -39,7 +39,7 @@ export async function action({ request }: ActionFunctionArgs) {
       data: {
         userId: user.id,
         mode: nextTimerMode,
-        completeAt: add(new Date(), { seconds: nextTimerDuration })
+        timeRemaining: nextTimerDuration
       }
     })
   });
