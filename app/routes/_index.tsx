@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { AppNavbar } from "~/components/navbar";
 import Timer from "~/components/timer";
 import { getPreferences } from "~/data/preferences";
+import { getActiveTimerSession } from "~/data/timers";
 import { prisma } from "~/db.server";
 
 import { requireUser } from "~/services/auth.server";
@@ -18,32 +19,7 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request);
-
-  let activeTimer;
-
-  await prisma.$transaction(async tx => {
-    // Can't upsert because Prisma's upsert method doesn't support ordering and we need to select the most recent timer
-    // - so we do the moral equivalent in a transaction instead.
-    activeTimer = await tx.timerSession.findFirst({
-      where: { user },
-      orderBy: { id: 'desc' }
-    });
-
-    if (!activeTimer) {
-      const preferences = await getPreferences(user);
-      const nextTimerDuration = preferences.defaultFocusTime;
-
-      // TODO: create the timer in paused mode (and probably flag that it hasn't started yet so we can render the
-      // "resume" button as "start" instead, and maybe do the same thing when we create timers in timer.next.tsx)
-      activeTimer = await tx.timerSession.create({
-        data: {
-          userId: user.id,
-          mode: "FOCUS",
-          timeRemaining: nextTimerDuration
-        }
-      });
-    }
-  });
+  const activeTimer = await prisma.$transaction(tx => getActiveTimerSession(tx, user));
 
   return { user, activeTimer };
 };

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 type Props = {
   timeRemaining?: number,
   completeAt?: Date,
+  started: boolean,
   onPause: () => unknown,
   onResume: () => unknown,
   onNext: () => unknown,
@@ -58,7 +59,7 @@ export default function Timer({ timeRemaining, completeAt, started, onPause, onR
     <div className="text-7xl font-medium text-foreground-800 m-2">
       {displayedMinutes}:{displayedSeconds}
     </div>
-    <div className="mt-2 m-1">
+    <div className="m-1">
       {mode == "FOCUS" ? "It's focus time" : "It's break time"}
     </div>
     <div className="flex mt-2 m-1 gap-2">
