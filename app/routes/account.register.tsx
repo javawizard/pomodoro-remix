@@ -1,7 +1,6 @@
-import { Button, Input, Link } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
-import { useEffect } from "react";
 import { AutoClearingErrorInput } from "~/components/auto-clearing-error-input";
 import { PASSWORD_MINIMUM_LENGTH } from "~/constants";
 import { urlWithParams } from "~/helpers/routing";

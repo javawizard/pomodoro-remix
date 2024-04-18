@@ -13,13 +13,30 @@ model User {
   name           String
   hashedPassword String
   preferences    UserPreferences?
+  TimerSession   TimerSession[]
 }
 
 model UserPreferences {
-  id                    Int  @id @default(autoincrement())
-  user                  User @relation(fields: [userId], references: [id], onUpdate: Restrict, onDelete: Cascade)
-  userId                Int  @unique
-  defaultFocusTime      Int?
-  defaultShortBreakTime Int?
-  defaultLongBreakTime  Int?
+  id               Int  @id @default(autoincrement())
+  user             User @relation(fields: [userId], references: [id], onUpdate: Restrict, onDelete: Cascade)
+  userId           Int  @unique
+  defaultFocusTime Int  @default(1500) // 25 minutes * 60 seconds
+  defaultBreakTime Int  @default(300) // 5 minutes * 60 seconds
+}
+
+enum TimerMode {
+  FOCUS
+  BREAK
+}
+
+// A timer session is a single run of the timer down to zero. The most recently created timer session is the "active
+// timer"; all other timer sessions are either paused or have a completeAt date that's in the past.
+model TimerSession {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id], onUpdate: Restrict, onDelete: Cascade)
+  userId Int
+
+  mode          TimerMode
+  timeRemaining Int? // remaining time in seconds. present only when the timer is paused or if this session was skipped without having been completed
+  completeAt    DateTime? // time at which the timer will complete. present only when the timer is running or has completed
 }
