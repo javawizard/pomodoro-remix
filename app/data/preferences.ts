@@ -12,8 +12,6 @@ export async function getPreferences(user: User) {
 export async function savePreferences(preferences: UserPreferences) {
   await prisma.userPreferences.update({
     where: { id: preferences.id },
-    data: {
-      preferences
-    }
+    data: preferences
   });
 }

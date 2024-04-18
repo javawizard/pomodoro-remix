@@ -1,11 +1,9 @@
-import { Button, Card } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
-import { add } from "date-fns";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useCallback } from "react";
 import { AppNavbar } from "~/components/navbar";
 import Timer from "~/components/timer";
-import { getPreferences } from "~/data/preferences";
 import { getActiveTimerSession } from "~/data/timers";
 import { prisma } from "~/db.server";
 

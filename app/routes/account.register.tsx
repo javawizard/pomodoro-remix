@@ -54,15 +54,15 @@ export default function Register() {
   const actionData = useActionData<typeof action>();
 
   const errors = actionData?.errors || {};
-  const nameError = errors['name'];
-  const emailError = errors['email'];
-  const passwordError = errors['password'];
+  const nameError = errors.name;
+  const emailError = errors.email;
+  const passwordError = errors.password;
 
   return <AuthFormLayout>
     <h1 className="text-4xl text-default-800 font-medium mb-4 mt-2">Sign up</h1>
     <AutoClearingErrorInput className="m-2" variant="bordered" name="name" label="Name" placeholder="Jane Doe" errorMessage={nameError} />
-    <AutoClearingErrorInput className="m-2" variant="bordered" name="email" label="Email" placeholder="jane@example.com" isInvalid={!!emailError} errorMessage={emailError} />
-    <AutoClearingErrorInput className="m-2" variant="bordered" type="password" name="password" placeholder="correct horse battery staple" label="Password" isInvalid={!!passwordError} errorMessage={passwordError} />
+    <AutoClearingErrorInput className="m-2" variant="bordered" name="email" label="Email" placeholder="jane@example.com" errorMessage={emailError} />
+    <AutoClearingErrorInput className="m-2" variant="bordered" type="password" name="password" placeholder="correct horse battery staple" label="Password" errorMessage={passwordError} />
     <Button className="m-2 w-full" color="primary" size="lg" type="submit">Sign up</Button>
   </AuthFormLayout>;
 }
