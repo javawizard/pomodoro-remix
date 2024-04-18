@@ -1,4 +1,8 @@
-import type { MetaFunction } from "@remix-run/node";
+import { Button } from "@nextui-org/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Form } from "@remix-run/react";
+
+import { requireUser } from "~/services/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,11 +11,22 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await requireUser(request);
+
+  return null;
+};
+
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix</h1>
       <ul>
+        <li>
+          <Form action="/logout" method="POST">
+            <Button type="submit">Log out</Button>
+          </Form>
+        </li>
         <li>
           <a
             target="_blank"
