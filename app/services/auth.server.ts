@@ -2,6 +2,7 @@ import argon2 from 'argon2';
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 
 import { prisma } from '~/db.server';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 // This is used to encrypt session cookies on the client side. In dev mode we use a hardcoded string; in production,
 // you'll want to generate a random string with e.g. `openssl rand -hex 64` and then make it available in the
@@ -35,13 +36,23 @@ async function getSession(request: Request) {
 export async function register({ name, email, password }: { name: string, email: string, password: string }) {
   const hashedPassword: string = await argon2.hash(password);
 
-  return await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword
+  try {
+    return await prisma.user.create({
+      data: {
+        name,
+        email,
+        hashedPassword
+      }
+    });
+  } catch (e) {
+    // Check to see if we got a unique constraint violation, in which case a user with that email already exists
+    if (e instanceof PrismaClientKnownRequestError && e.code == 'P2002') {
+      return false;
     }
-  });
+
+    // Something else went wrong, so just propagate the exception
+    throw e;
+  }
 }
 
 export async function loginAndRedirect(request: Request, email: string, password: string, redirectTo: string) {

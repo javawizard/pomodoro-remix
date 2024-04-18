@@ -1,6 +1,7 @@
-import { Button, Card, Input } from '@nextui-org/react';
+import { Button, Card, Input, Link } from '@nextui-org/react';
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useSearchParams } from "@remix-run/react";
+import AuthFormLayout from '~/layouts/auth-form';
 
 import { getUserIfLoggedIn, loginAndRedirect } from '~/services/auth.server';
 
@@ -22,20 +23,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Login() {
   const actionData = useActionData<typeof action>();
+  const [searchParams] = useSearchParams();
 
   const loginFailed = actionData?.loginFailed;
+  const registered = searchParams?.has("registered");
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <Form method="POST" className="flex items-center">
-        <Card className="flex items-center p-4" style={{ minWidth: "30em" }} shadow="lg">
-          <h1 className="text-4xl text-default-800 font-medium mb-4 mt-2">Pomodoro</h1>
-          {loginFailed && <div className="text-danger mb-2">Incorrect username or password.</div>}
-          <Input className="m-2" variant="bordered" name="email" label="Email" />
-          <Input className="m-2" variant="bordered" type="password" name="password" label="Password" />
-          <Button className="m-2 w-full" color="primary" size="lg" type="submit">Log in</Button>
-        </Card>
-      </Form>
-    </div>
+    // explicitly specify the action in order to nuke the ?registered=true param when the user tries to log in
+    <AuthFormLayout action="/account/login">
+      <h1 className="text-4xl text-default-800 font-medium mb-4 mt-2">Pomodoro</h1>
+      {loginFailed && <div className="text-danger mb-2">Incorrect username or password.</div>}
+      {registered && <div className="mb-2">Your account was registered! Please log in below.</div>}
+      <Input className="m-2" variant="bordered" name="email" label="Email" />
+      <Input className="m-2" variant="bordered" type="password" name="password" label="Password" />
+      <Button className="m-2 w-full" color="primary" size="lg" type="submit">Log in</Button>
+      <Button className="w-full" as={Link} href="/account/register" size="lg" variant="flat">Sign up</Button>
+    </AuthFormLayout>
   );
 };
