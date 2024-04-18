@@ -71,6 +71,7 @@ export default function Index() {
           completeAt={activeTimer.completeAt && new Date(activeTimer.completeAt)}
           timeRemaining={activeTimer.timeRemaining}
           started={activeTimer.started}
+          mode={activeTimer.mode}
           onPause={onPause}
           onResume={onResume}
           onNext={onNext}

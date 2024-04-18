@@ -58,6 +58,9 @@ export default function Timer({ timeRemaining, completeAt, started, onPause, onR
     <div className="text-7xl font-medium text-foreground-800 m-2">
       {displayedMinutes}:{displayedSeconds}
     </div>
+    <div className="mt-2 m-1">
+      {mode == "FOCUS" ? "It's focus time" : "It's break time"}
+    </div>
     <div className="flex mt-2 m-1 gap-2">
       {isPaused && <Button onPress={onResume} variant="ghost" color="primary">{started ? "Resume" : "Start"}</Button>}
       {!isPaused && !isComplete && <Button onPress={onPause} variant="ghost">Pause</Button>}
